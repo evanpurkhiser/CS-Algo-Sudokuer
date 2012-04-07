@@ -151,7 +151,7 @@ var solver = function()
 		if ( ! (value in solver.availableValues[y][x]))
 			return false;
 
-		// Test that the valued is availble for this cell
+		// Test that the valued is available for this cell
 		if (solver.availableValues[y][x][value] === false)
 			return false;
 
@@ -173,7 +173,7 @@ var solver = function()
 		var squareY = Math.floor(y / 3) * 3,
 		    squareX = Math.floor(x / 3) * 3;
 
-		// Determin if the value exists in the square
+		// Determine if the value exists in the square
 		for (var i = squareY; i < squareY + 3; ++i)
 		{
 			for (var j = squareX; j < squareX + 3; ++j)
@@ -317,4 +317,4 @@ emptyPuzzle[7] = [0, 0, 0, 0, 0, 0, 0, 0, 0];
 emptyPuzzle[8] = [0, 0, 0, 0, 0, 0, 0, 0, 0];
 
 // Solve the puzzle
-console.log(solver.solve(emptyPuzzle));
+console.log(solver.solve(puzzle));
