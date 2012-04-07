@@ -72,7 +72,7 @@ var solver = function()
 				if (solver.isValidValue(cell, newValue))
 				{
 					// Set this as the value for the cell
-					solver.puzzle[row][column] = parseInt(newValue);
+					solver.puzzle[row][column] = newValue;
 
 					// Remove the value from it's available list
 					solver.availableValues[row][column][newValue] = false;
@@ -212,7 +212,7 @@ var solver = function()
 		{
 			if (solver.availableValues[y][x][value] === true)
 			{
-				availableForRand.push(value);
+				availableForRand.push(parseInt(value));
 			}
 		}
 
