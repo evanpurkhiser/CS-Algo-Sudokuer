@@ -23,7 +23,7 @@ var solver = function()
 	 * to us and should not be changed.
 	 *
 	 * @param  {array} unsolvedPuzzle The 2D puzzle array
-	 * @return {array}                The solved 2D puzzle array
+	 * @return {Array}                The solved 2D puzzle array
 	 */
 	this.solve = function(unsolvedPuzzle)
 	{
@@ -57,6 +57,15 @@ var solver = function()
 			}
 		}
 
+		// Begin iterating horizontally over the puzzle filling the cells
+		for (var index = 0; index < 9 * 9; ++index)
+		{
+			// Calulate the row and column for this index
+			var row    = Math.floor(index / 9),
+			    column = index % 9;
+
+
+		}
 
 		return solver.puzzle;
 	};
@@ -89,9 +98,9 @@ var solver = function()
 	 * If all these conditions are matched, than the value
 	 * can be placed into the cell
 	 *
-	 * @param  {arrray}   cell  The cell given as an array of [y, x]
-	 * @param  {integer}  value The value to check for cell validity
-	 * @return {Boolean}        Weather the value is valid in the cell
+	 * @param  {Arrray}  cell  The cell given as an array of [y, x]
+	 * @param  {Integer} value The value to check for cell validity
+	 * @return {Boolean}       Weather the value is valid in the cell
 	 */
 	this.isValidValue = function(cell, value)
 	{
@@ -138,6 +147,35 @@ var solver = function()
 		}
 
 		return true;
+	}
+
+	/**
+	 * Get a random value from the list of available
+	 * values for a specified cell. If the cell has
+	 * no values available then a boolean false will
+	 * be returned
+	 *
+	 * @param  {Array} cell The cell given as an array of [y, x]
+	 * @return {Mixed}      Boolean false if there are no values
+	 *                      available, or a random Integer value
+	 *                      that exists in the list of values
+	 */
+	this.getRandForCell = function(cell)
+	{
+
+	}
+
+	/**
+	 * Reset the available values for a given cell
+	 * so that the cell can now take any value. This
+	 * method will also remove what ever value was set
+	 * for the cell previously
+	 *
+	 * @param {Array} cell The cell given as an array of  [y, x] to clear
+	 */
+	this.resetCellValues = function(cell)
+	{
+
 	}
 
 	// Make the solve method public
