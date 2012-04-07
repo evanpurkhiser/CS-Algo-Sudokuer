@@ -22,6 +22,8 @@ var solver = function()
 	 * indicates that the cell has already been given
 	 * to us and should not be changed.
 	 *
+	 * If the puzzle is unsolvable then false will be returned
+	 *
 	 * @param  {array} unsolvedPuzzle The 2D puzzle array
 	 * @return {Array}                The solved 2D puzzle array
 	 */
@@ -104,6 +106,10 @@ var solver = function()
 					// Move back to the previous index
 					--index;
 
+					// If we backtracked too far then this puzzle is unsolvable
+					if (index < 0)
+						return false;
+
 					// Get the cell array of the previous cell
 					var previousCell = solver.getCellByIndex(index);
 
@@ -117,8 +123,6 @@ var solver = function()
 					break;
 				}
 			}
-
-			console.log(solver.puzzle);
 		}
 
 		return solver.puzzle;
