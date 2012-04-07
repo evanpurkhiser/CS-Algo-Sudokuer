@@ -12,40 +12,36 @@ var solver = function()
 	var root = this;
 
 	this.puzzle          = [];
-	this.lockedCells     = [];
-	this.attemptedValues = [];
+	this.availableValues = [];
 
 	this.solve = function(unsolvedPuzzle)
 	{
 		// Keep the puzzle, we will be filling in it's values
 		root.puzzle = unsolvedPuzzle;
 
-		// Setup the locked cells property to keep track of unchangeable cells
-		for (row in root.puzzle)
+		// Setup the available values for each cell. If a cell already has
+		// a number filled, then the available values for that cell will be
+		// an empty array, indicating that there are no available values
+		for (var row in root.puzzle)
 		{
-			root.lockedCells[row] = [];
+			root.availableValues[row] = [];
 
-			for (column in root.puzzle[row])
+			for (var column in root.puzzle)
 			{
-				// Set the value for weather the cell is locked or not
-				root.lockedCells[row][column] = root.puzzle[row][column] !== 0;
+				// determine if the cell will have values
+				root.availableValues[row][column] = [];
+
+				// Continue the loop if there will be no available values
+				if (root.puzzle[row][column] === 0)
+					continue;
+
+				// All numbers are valid for this cell, 1-9
+				for (var i = 0; i < 10; ++i)
+				{
+					root.availableValues[row][column][i] = true;
+				}
 			}
 		}
-
-		// Setup the attempted values multidimensional array.
-		// This will keep track of what values have been attempted in a cell
-		for (row in root.puzzle)
-		{
-			root.attemptedValues[row] = [];
-
-			for (column in root.puzzle[row])
-			{
-				root.attemptedValues[row][column] = [];
-			}
-		}
-
-
-
 
 		return root.puzzle;
 	};
