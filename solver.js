@@ -144,7 +144,7 @@ var solver = function()
 		var y = cell[0], x = cell[1];
 
 		// Ensure that the cell is a mutable cell
-		if (solver.availableValues[y][x] === false)
+		if ( ! solver.isCellMutable(cell))
 			return false;
 
 		// Make sure that the value can even be used at all
@@ -202,7 +202,7 @@ var solver = function()
 		var y = cell[0], x = cell[1];
 
 		// Ignore cells that are immutable
-		if (solver.availableValues[y][x] === false)
+		if ( ! solver.isCellMutable(cell))
 			return false;
 
 		// Build a list of the available values
@@ -232,14 +232,14 @@ var solver = function()
 	 * method will also remove what ever value was set
 	 * for the cell previously
 	 *
-	 * @param {Array} cell The cell given as an array of  [y, x] to clear
+	 * @param {Array} cell The cell given as an array of [y, x] to clear
 	 */
 	this.resetCellValues = function(cell)
 	{
 		var y = cell[0], x = cell[1];
 
 		// Never reset immutable cells
-		if (solver.availableValues[y][x] === false)
+		if ( ! solver.isCellMutable(cell))
 			return false;
 
 		// Set all values for this cell as available
@@ -250,6 +250,24 @@ var solver = function()
 
 		// Set the value of the cell to zero (unknown)
 		solver.puzzle[y][x] = 0;
+	}
+
+	/**
+	 * Determine if a given cell is mutable. That is the
+	 * cell has not been defined in the puzzle as an
+	 * unchangeable value.
+	 *
+	 * We define immutable cells as those that have their
+	 * `availableValues` array set to false
+	 *
+	 * @param  {Array}   cell The cell given as an array of [y, x]
+	 * @return {Boolean}      Weather the cell is mutable or not
+	 */
+	this.isCellMutable = function(cell)
+	{
+		var y = cell[0], x = cell[1];
+
+		return solver.availableValues[y][x] !== false
 	}
 
 	/**
