@@ -57,9 +57,10 @@ var solver = function()
 		// Begin iterating horizontally over the puzzle filling the cells
 		for (var index = 0; index < 9 * 9;)
 		{
-			// Calulate the row and column for this index
-			var row    = Math.floor(index / 9),
-			    column = index % 9;
+			// Calculate the row and column for this index
+			var cell   = solver.getCellByIndex(index),
+			    row    = cell[0],
+			    column = cell[1];
 
 			// Get a random value for this cell (if one is available)
 			var newValue = solver.getRandForCell([row, column]);
@@ -239,6 +240,18 @@ var solver = function()
 
 		// Set the value of the cell to zero (unknown)
 		solver.puzzle[y][x] = 0;
+	}
+
+	/**
+	 * Given an index from 0-80 return the cell
+	 * coordinates as an array in the form [x, y]
+	 *
+	 * @param  {Integer} index The index of the cell
+	 * @return {Array}         The coordinates of the cell
+	 */
+	this.getCellByIndex = function(index)
+	{
+		return [Math.floor(index / 9), index % 9];
 	}
 
 	// Make the solve method public
