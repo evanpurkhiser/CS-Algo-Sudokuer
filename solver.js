@@ -92,17 +92,12 @@ var solver = function()
 					// Set this as the value for the cell
 					solver.puzzle[row][column] = newValue;
 
-					// Remove the value from it's available list
-					solver.availableValues[row][column][newValue] = false;
-
 					// Move to the next cell in the table
 					++index;
 				}
-				else
-				{
-					// This value can't be used for this cell
-					solver.availableValues[row][column][newValue] = false;
-				}
+
+				// Remove the value from it's available list
+				solver.availableValues[row][column][newValue] = false;
 			}
 			else
 			{
