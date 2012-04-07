@@ -9,7 +9,7 @@
  */
 var solver = function()
 {
-	var root = this;
+	var solver = this;
 
 	this.puzzle          = [];
 	this.availableValues = [];
@@ -28,33 +28,34 @@ var solver = function()
 	this.solve = function(unsolvedPuzzle)
 	{
 		// Keep the puzzle, we will be filling in it's values
-		root.puzzle = unsolvedPuzzle;
+		solver.puzzle = unsolvedPuzzle;
 
 		// Setup the available values for each cell. If a cell already has
 		// a number filled, then the available values for that cell will be
 		// an empty array, indicating that there are no available values
-		for (var row in root.puzzle)
+		for (var row in solver.puzzle)
 		{
-			root.availableValues[row] = [];
+			solver.availableValues[row] = [];
 
-			for (var column in root.puzzle)
+			for (var column in solver.puzzle)
 			{
 				// determine if the cell will have values
-				root.availableValues[row][column] = [];
+				solver.availableValues[row][column] = [];
 
 				// Continue the loop if there will be no available values
-				if (root.puzzle[row][column] === 0)
+				if (solver.puzzle[row][column] !== 0)
 					continue;
 
 				// All numbers are valid for this cell, 1-9
 				for (var i = 0; i < 10; ++i)
 				{
-					root.availableValues[row][column][i] = true;
+					solver.availableValues[row][column][i] = true;
 				}
 			}
 		}
 
-		return root.puzzle;
+
+		return solver.puzzle;
 	};
 
 	/**
@@ -81,13 +82,51 @@ var solver = function()
 	 * If all these conditions are matched, than the value
 	 * can be placed into the cell
 	 *
-	 * @param  {arrray}   cell  The cell given as an array of [x, y]
+	 * @param  {arrray}   cell  The cell given as an array of [y, x]
 	 * @param  {integer}  value The value to check for cell validity
 	 * @return {Boolean}        Weather the value is valid in the cell
 	 */
 	this.isValidValue = function(cell, value)
 	{
+		var y = cell[0], x = cell[1];
 
+		// Make sure that the value can even be used at all
+		if ( ! (value in solver.availableValues[y][x]))
+			return false;
+
+		// Test that the valued is availble for this cell
+		if (solver.availableValues[y][x][value] === false)
+			return false;
+
+		// Test that the value is available for this row
+		for (var column in solver.puzzle[y])
+		{
+			if (value === solver.puzzle[y][column])
+				return false;
+		}
+
+		// Test that the value is not in the column
+		for (var row in solver.puzzle)
+		{
+			if (value === solver.puzzle[row][x])
+				return false;
+		}
+
+		// Find the top-left corner of the super square
+		var squareY = Math.floor(y / 3) * 3,
+		    squareX = Math.floor(x / 3) * 3;
+
+		// Determin if the value exists in the square
+		for (var i = squareY; i < squareY + 3; ++i)
+		{
+			for (var j = squareX; j < squareX + 3; ++j)
+			{
+				if (value === solver.puzzle[i][j])
+					return false;
+			}
+		}
+
+		return true;
 	}
 
 	// Make the solve method public
