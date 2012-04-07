@@ -68,7 +68,7 @@ var solver = function()
 			// Make sure we have a valid value for this cell
 			if (newValue !== false)
 			{
-				// Determ if the value fits into the cell
+				// Determine if the value fits into the cell
 				if (solver.isValidValue([row, column], newValue))
 				{
 					// Set this as the value for the cell
@@ -77,7 +77,7 @@ var solver = function()
 					// Remove the value from it's available list
 					solver.availableValues[row][column][newValue] = false;
 
-					// Move to the next cell in the talbe
+					// Move to the next cell in the table
 					++index;
 				}
 				else
@@ -88,7 +88,17 @@ var solver = function()
 			}
 			else
 			{
+				// Reset the available values for this cell
+				solver.resetCellValues([row, column]);
 
+				// Get the cell array of the previous cell
+				var previousCell = solver.getCellByIndex(index);
+
+				// Clear the value of the previous cell
+				solver.puzzle[previousCell[0]][previousCell[1]] = 0;
+
+				// Move back to the previous index
+				--index;
 			}
 
 			console.log(solver.puzzle);
