@@ -72,7 +72,7 @@ var solver = function()
 				if (solver.isValidValue(cell, newValue))
 				{
 					// Set this as the value for the cell
-					solver.puzzle[row][column] = newValue;
+					solver.puzzle[row][column] = parseInt(newValue);
 
 					// Remove the value from it's available list
 					solver.availableValues[row][column][newValue] = false;
