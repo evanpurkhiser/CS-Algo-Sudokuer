@@ -32,7 +32,7 @@ var solver = function()
 
 		// Setup the available values for each cell. If a cell already has
 		// a number filled, then the available values for that cell will be
-		// an empty array, indicating that there are no available values
+		// a boolean false, indicating that the value should not be changed
 		for (var row in solver.puzzle)
 		{
 			solver.availableValues[row] = [];
@@ -44,7 +44,10 @@ var solver = function()
 
 				// Continue the loop if there will be no available values
 				if (solver.puzzle[row][column] !== 0)
+				{
+					solver.availableValues[row][column] = false;
 					continue;
+				}
 
 				// All numbers are valid for this cell, 1-9
 				for (var i = 0; i < 10; ++i)
@@ -60,22 +63,26 @@ var solver = function()
 
 	/**
 	 * Determine if a given value is an acceptable
-	 * value to be filled into a cell. There are four
+	 * value to be filled into a cell. There are five
 	 * conditions that a value must meet in order for
 	 * the value for be a valid number for a given cell
 	 *
-	 *  1. The value must be in the `availableValues` list
-	 *     for that cell, if it is not in the list then it
-	 *     has already been tried in that cell and was
+	 *  1. The value must not be false in the list of
+	 *     available values, if it is false, this indicates
+	 *     that the value is immutable and cannot be changed
+	 *
+	 *  2. The value must be true in the `availableValues`
+	 *     list for that cell, if it is not in the list then
+	 *     it has already been tried in that cell and was
 	 *     an invalid value.
 	 *
-	 *  2. The value currently exists only once in the given
+	 *  3. The value currently exists only once in the given
 	 *     row of the cell.
 	 *
-	 *  3. The value currently exists only once in the given
+	 *  4. The value currently exists only once in the given
 	 *     column of the cell
 	 *
-	 *  4. The value currently exists only once in the sudoku
+	 *  5. The value currently exists only once in the sudoku
 	 *     square that the cell falls into. This is a 3x3
 	 *     square the exists as a super set of the cells
 	 *
@@ -89,6 +96,10 @@ var solver = function()
 	this.isValidValue = function(cell, value)
 	{
 		var y = cell[0], x = cell[1];
+
+		// Ensure that the cell is a mutable cell
+		if (solver.availableValues[y][x] === false)
+			return false;
 
 		// Make sure that the value can even be used at all
 		if ( ! (value in solver.availableValues[y][x]))
