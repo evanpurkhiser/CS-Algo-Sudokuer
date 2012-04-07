@@ -9,15 +9,54 @@
  */
 var solver = function()
 {
-	var solve = function(unsolvedPuzzle)
+	var root = this;
+
+	this.puzzle          = [];
+	this.lockedCells     = [];
+	this.attemptedValues = [];
+
+	this.solve = function(unsolvedPuzzle)
 	{
-		return unsolvedPuzzle;
+		// Keep the puzzle, we will be filling in it's values
+		root.puzzle = unsolvedPuzzle;
+
+		// Setup the locked cells property to keep track of unchangeable cells
+		for (row in root.puzzle)
+		{
+			root.lockedCells[row] = [];
+
+			for (column in root.puzzle[row])
+			{
+				// Set the value for weather the cell is locked or not
+				root.lockedCells[row][column] = root.puzzle[row][column] !== 0;
+			}
+		}
+
+		// Setup the attempted values multidimensional array.
+		// This will keep track of what values have been attempted in a cell
+		for (row in root.puzzle)
+		{
+			root.attemptedValues[row] = [];
+
+			for (column in root.puzzle[row])
+			{
+				root.attemptedValues[row][column] = [];
+			}
+		}
+
+
+
+
+		return root.puzzle;
 	};
 
+	// Make the solve method public
 	return {
-		'solve' : solve
+		'solve' : this.solve,
 	};
 }();
+
+
 
 
 // Setup a unsolved puzzle
