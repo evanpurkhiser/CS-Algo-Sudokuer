@@ -2,7 +2,7 @@
  * Singleton puzzle solver object
  *
  * This object is used to solve sudoku puzzles.
- * The only method exposed will is the solve method
+ * The only method exposed is the solve method
  * which accepts a two dimensional array of sudoku
  * cell values, where empty cells are defined as any
  * cell that contains the value zero.
