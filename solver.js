@@ -14,6 +14,17 @@ var solver = function()
 	this.puzzle          = [];
 	this.availableValues = [];
 
+	/**
+	 * Solve a sudoku puzzle using backtracking.
+	 * A puzzle should be given as a two dimensional
+	 * array of values, where the `0` value indicates
+	 * that the cell is empty, and any other value
+	 * indicates that the cell has already been given
+	 * to us and should not be changed.
+	 *
+	 * @param  {array} unsolvedPuzzle The 2D puzzle array
+	 * @return {array}                The solved 2D puzzle array
+	 */
 	this.solve = function(unsolvedPuzzle)
 	{
 		// Keep the puzzle, we will be filling in it's values
@@ -46,10 +57,41 @@ var solver = function()
 		return root.puzzle;
 	};
 
+	/**
+	 * Determine if a given value is an acceptable
+	 * value to be filled into a cell. There are four
+	 * conditions that a value must meet in order for
+	 * the value for be a valid number for a given cell
+	 *
+	 *  1. The value must be in the `availableValues` list
+	 *     for that cell, if it is not in the list then it
+	 *     has already been tried in that cell and was
+	 *     an invalid value.
+	 *
+	 *  2. The value currently exists only once in the given
+	 *     row of the cell.
+	 *
+	 *  3. The value currently exists only once in the given
+	 *     column of the cell
+	 *
+	 *  4. The value currently exists only once in the sudoku
+	 *     square that the cell falls into. This is a 3x3
+	 *     square the exists as a super set of the cells
+	 *
+	 * If all these conditions are matched, than the value
+	 * can be placed into the cell
+	 *
+	 * @param  {arrray}   cell  The cell given as an array of [x, y]
+	 * @param  {integer}  value The value to check for cell validity
+	 * @return {Boolean}        Weather the value is valid in the cell
+	 */
+	this.isValidValue = function(cell, value)
+	{
+
+	}
+
 	// Make the solve method public
-	return {
-		'solve' : this.solve,
-	};
+	return {'solve' : this.solve};
 }();
 
 
