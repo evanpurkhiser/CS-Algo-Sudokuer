@@ -24,8 +24,9 @@ var solver = function()
 	 *
 	 * If the puzzle is unsolvable then false will be returned
 	 *
-	 * @param  {array} unsolvedPuzzle The 2D puzzle array
-	 * @return {Array}                The solved 2D puzzle array
+	 * @param  {array}  unsolvedPuzzle The 2D puzzle array
+	 * @return {Object}                The solved puzzle and some statistics
+	 *                                 about the generated algorithm
 	 */
 	this.solve = function(unsolvedPuzzle)
 	{
@@ -56,6 +57,11 @@ var solver = function()
 			}
 		}
 
+		// Keep track of the iterations and start time
+		var iterations = 0,
+		    backtracks = 0,
+		    startTime  = new Date().getTime();
+
 		// Begin iterating horizontally over the puzzle filling the cells
 		for (var index = 0; index < 9 * 9;)
 		{
@@ -70,6 +76,9 @@ var solver = function()
 				++index;
 				continue;
 			}
+
+			// Keep track of how many iterations we have been through
+			++iterations;
 
 			// Get a random value for this cell (if one is available)
 			var newValue = solver.getRandForCell(cell);
@@ -120,12 +129,24 @@ var solver = function()
 					// Clear the value of the previous cell
 					solver.puzzle[previousCell[0]][previousCell[1]] = 0;
 
+					// Keep track of how many times we had to backtrack
+					++backtracks;
+
 					break;
 				}
 			}
 		}
 
-		return solver.puzzle;
+		// Get the end time
+		var endTime = new Date().getTime();
+
+		// Compile a nice object with the solved information
+		return {
+			'puzzle'      : solver.puzzle,
+			'iterations'  : iterations,
+			'backtracks'  : backtracks,
+			'runningTime' : endTime - startTime,
+		};
 	};
 
 	/**
