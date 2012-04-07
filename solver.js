@@ -55,12 +55,42 @@ var solver = function()
 		}
 
 		// Begin iterating horizontally over the puzzle filling the cells
-		for (var index = 0; index < 9 * 9; ++index)
+		for (var index = 0; index < 9 * 9;)
 		{
 			// Calulate the row and column for this index
 			var row    = Math.floor(index / 9),
 			    column = index % 9;
 
+			// Get a random value for this cell (if one is available)
+			var newValue = solver.getRandForCell([row, column]);
+
+			// Make sure we have a valid value for this cell
+			if (newValue !== false)
+			{
+				// Determ if the value fits into the cell
+				if (solver.isValidValue([row, column], newValue))
+				{
+					// Set this as the value for the cell
+					solver.puzzle[row][column] = newValue;
+
+					// Remove the value from it's available list
+					solver.availableValues[row][column][newValue] = false;
+
+					// Move to the next cell in the talbe
+					++index;
+				}
+				else
+				{
+					// This value can't be used for this cell
+					solver.availableValues[row][column][newValue] = false;
+				}
+			}
+			else
+			{
+
+			}
+
+			console.log(solver.puzzle);
 		}
 
 		return solver.puzzle;
@@ -232,5 +262,18 @@ puzzle[6] = [0, 0, 2, 0, 0, 0, 6, 8, 4]; // [1, 7, 2, 5, 3, 9, 6, 8, 4]
 puzzle[7] = [0, 4, 0, 0, 7, 1, 0, 0, 0]; // [8, 4, 9, 6, 7, 1, 5, 3, 2]
 puzzle[8] = [6, 5, 0, 0, 0, 8, 0, 0, 9]; // [6, 5, 3, 2, 4, 8, 7, 1, 9]
 
+// Setup an empty puzzle
+var emptyPuzzle = [];
+
+emptyPuzzle[0] = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+emptyPuzzle[1] = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+emptyPuzzle[2] = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+emptyPuzzle[3] = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+emptyPuzzle[4] = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+emptyPuzzle[5] = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+emptyPuzzle[6] = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+emptyPuzzle[7] = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+emptyPuzzle[8] = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+
 // Solve the puzzle
-console.log(solver.solve(puzzle));
+console.log(solver.solve(emptyPuzzle));
