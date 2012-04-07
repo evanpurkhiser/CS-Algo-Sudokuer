@@ -62,6 +62,13 @@ var solver = function()
 			    row    = cell[0],
 			    column = cell[1];
 
+			// If this cell isn't mutable, continue to the next
+			if ( ! solver.isCellMutable(cell))
+			{
+				++index;
+				continue;
+			}
+
 			// Get a random value for this cell (if one is available)
 			var newValue = solver.getRandForCell(cell);
 
@@ -91,14 +98,24 @@ var solver = function()
 				// Reset the available values for this cell
 				solver.resetCellValues(cell);
 
-				// Move back to the previous index
-				--index;
+				// Backtrack to the most recent mutable cell
+				while (true)
+				{
+					// Move back to the previous index
+					--index;
 
-				// Get the cell array of the previous cell
-				var previousCell = solver.getCellByIndex(index);
+					// Get the cell array of the previous cell
+					var previousCell = solver.getCellByIndex(index);
 
-				// Clear the value of the previous cell
-				solver.puzzle[previousCell[0]][previousCell[1]] = 0;
+					// Keep backtracking if this cell isn't mutable
+					if ( ! solver.isCellMutable(previousCell))
+						continue;
+
+					// Clear the value of the previous cell
+					solver.puzzle[previousCell[0]][previousCell[1]] = 0;
+
+					break;
+				}
 			}
 
 			console.log(solver.puzzle);
@@ -317,4 +334,4 @@ emptyPuzzle[7] = [0, 0, 0, 0, 0, 0, 0, 0, 0];
 emptyPuzzle[8] = [0, 0, 0, 0, 0, 0, 0, 0, 0];
 
 // Solve the puzzle
-console.log(solver.solve(emptyPuzzle));
+console.log(solver.solve(puzzle));
