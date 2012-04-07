@@ -63,13 +63,13 @@ var solver = function()
 			    column = cell[1];
 
 			// Get a random value for this cell (if one is available)
-			var newValue = solver.getRandForCell([row, column]);
+			var newValue = solver.getRandForCell(cell);
 
 			// Make sure we have a valid value for this cell
 			if (newValue !== false)
 			{
 				// Determine if the value fits into the cell
-				if (solver.isValidValue([row, column], newValue))
+				if (solver.isValidValue(cell, newValue))
 				{
 					// Set this as the value for the cell
 					solver.puzzle[row][column] = newValue;
@@ -89,7 +89,7 @@ var solver = function()
 			else
 			{
 				// Reset the available values for this cell
-				solver.resetCellValues([row, column]);
+				solver.resetCellValues(cell);
 
 				// Get the cell array of the previous cell
 				var previousCell = solver.getCellByIndex(index);
