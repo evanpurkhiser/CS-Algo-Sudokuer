@@ -36,6 +36,7 @@ If the algorithm was unable to solve the puzzle then boolean false will be retur
 
 #### Motivation
 
-This project was done in conjunction with Drew Johnson (@noautosave) four our
-*Introduction to Algorithms* class as a final project. While not the most complex
-algorithm to implement, it was indeed interesting and challenging.
+This project was done in conjunction with Drew Johnson
+([@noautosave](https://github.com/noautosave)) for our *Introduction to Algorithms*
+class as a final project. While not the most complex algorithm to implement, it
+was indeed interesting and challenging.
