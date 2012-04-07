@@ -50,7 +50,7 @@ var solver = function()
 				}
 
 				// All numbers are valid for this cell, 1-9
-				for (var i = 0; i < 10; ++i)
+				for (var i = 1; i < 10; ++i)
 				{
 					solver.availableValues[row][column][i] = true;
 				}
@@ -162,7 +162,31 @@ var solver = function()
 	 */
 	this.getRandForCell = function(cell)
 	{
+		var y = cell[0], x = cell[1];
 
+		// Ignore cells that are immutable
+		if (solver.availableValues[y][x] === false)
+			return false;
+
+		// Build a list of the available values
+		var availableForRand = [];
+
+		for (var value in solver.availableValues[y][x])
+		{
+			if (solver.availableValues[y][x][value] === true)
+			{
+				availableForRand.push(value);
+			}
+		}
+
+		// Make sure that cell has values available
+		if (availableForRand.length === 0)
+			return false;
+
+		// Get the index to select randomly
+		var randIndex = Math.floor(Math.random() * availableForRand.length);
+
+		return availableForRand[randIndex];
 	}
 
 	/**
