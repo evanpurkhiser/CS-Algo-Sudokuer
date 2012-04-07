@@ -91,14 +91,14 @@ var solver = function()
 				// Reset the available values for this cell
 				solver.resetCellValues(cell);
 
+				// Move back to the previous index
+				--index;
+
 				// Get the cell array of the previous cell
 				var previousCell = solver.getCellByIndex(index);
 
 				// Clear the value of the previous cell
 				solver.puzzle[previousCell[0]][previousCell[1]] = 0;
-
-				// Move back to the previous index
-				--index;
 			}
 
 			console.log(solver.puzzle);
@@ -317,4 +317,4 @@ emptyPuzzle[7] = [0, 0, 0, 0, 0, 0, 0, 0, 0];
 emptyPuzzle[8] = [0, 0, 0, 0, 0, 0, 0, 0, 0];
 
 // Solve the puzzle
-console.log(solver.solve(puzzle));
+console.log(solver.solve(emptyPuzzle));
