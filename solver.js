@@ -50,10 +50,7 @@ var solver = function()
 				}
 
 				// All numbers are valid for this cell, 1-9
-				for (var i = 1; i < 10; ++i)
-				{
-					solver.availableValues[row][column][i] = true;
-				}
+				solver.resetCellValues([row, column]);
 			}
 		}
 
@@ -63,7 +60,6 @@ var solver = function()
 			// Calulate the row and column for this index
 			var row    = Math.floor(index / 9),
 			    column = index % 9;
-
 
 		}
 
@@ -199,7 +195,20 @@ var solver = function()
 	 */
 	this.resetCellValues = function(cell)
 	{
+		var y = cell[0], x = cell[1];
 
+		// Never reset immutable cells
+		if (solver.availableValues[y][x] === false)
+			return false;
+
+		// Set all values for this cell as available
+		for (var i = 1; i < 10; ++i)
+		{
+			solver.availableValues[y][x][i] = true;
+		}
+
+		// Set the value of the cell to zero (unknown)
+		solver.puzzle[y][x] = 0;
 	}
 
 	// Make the solve method public
