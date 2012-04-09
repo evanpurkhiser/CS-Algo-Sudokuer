@@ -149,6 +149,36 @@ var sudoku = function()
 	};
 
 	/**
+	 * Generate a sudoku puzzle that is not gaurenteed to be
+	 * unique by genrating a random sudoku board and then
+	 * subsiquently removing random values from the board.
+	 * The puzzles generated are NOT gaurenteed to be unique
+	 * as we are not checking if more than one solution exists
+	 * after removing each number, we are simpley removing
+	 * values from the board to give the solver something to do
+	 *
+	 * @return {Array} The generated puzzle board
+	 */
+	this.generate = function()
+	{
+		// Create a empty board
+		var emptyBoard = [];
+
+		for (var i = 0; i < 9; ++i)
+		{
+			emptyBoard[i] = [];
+
+			for (var j = 0; j < 9; ++j)
+			{
+				emptyBoard[i][j] = 0;
+			}
+		}
+
+		// Solve the board to get a random completed puzzle
+		var filledBoard = sudoku.solve(emptyBoard);
+	};
+
+	/**
 	 * Determine if a given value is an acceptable
 	 * value to be filled into a cell. There are five
 	 * conditions that a value must meet in order for
@@ -324,5 +354,8 @@ var sudoku = function()
 	};
 
 	// Make the solve method public
-	return {'solve' : this.solve};
+	return {
+		'solve'    : this.solve,
+		'generate' : this.generate,
+	};
 }();
