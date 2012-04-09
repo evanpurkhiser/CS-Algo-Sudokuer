@@ -175,7 +175,28 @@ var sudoku = function()
 		}
 
 		// Solve the board to get a random completed puzzle
-		var filledBoard = sudoku.solve(emptyBoard);
+		var nuewBoard = sudoku.solve(emptyBoard).puzzle;
+
+		// Decide how many numbers to remove (between 46 to 66 numbers)
+		var cellsToRemove = Math.floor(46 + Math.random() * 20);
+
+		// Remove the cells from the puzzle
+		while (cellsToRemove > 0)
+		{
+			// Get a random cell to remove valeus from
+			var cell = sudoku.getCellByIndex(Math.floor(Math.random() * 81));
+
+			// Make sure the cell isn't empty
+			if (nuewBoard[cell[0]][cell[1]] !== 0)
+			{
+				--cellsToRemove;
+
+				// Empty the cell from the board
+				nuewBoard[cell[0]][cell[1]] = 0;
+			}
+		}
+
+		return nuewBoard;
 	};
 
 	/**
