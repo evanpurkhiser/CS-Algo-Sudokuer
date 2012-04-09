@@ -1,15 +1,19 @@
 /**
- * Singleton puzzle solver object
+ * Singleton puzzle solver and generator object
  *
- * This object is used to solve sudoku puzzles.
- * The only method exposed is the solve method
- * which accepts a two dimensional array of sudoku
+ * This object is used to solve and generate sudoku
+ * puzzles. Two methods are exposed, solve and generate.
+ *
+ * solve accepts a two dimensional array of sudoku
  * cell values, where empty cells are defined as any
  * cell that contains the value zero.
+ *
+ * generate accepts no values but will return a unsolved
+ * puzzle.
  */
-var solver = function()
+var sudoku = function()
 {
-	var solver = this;
+	var sudoku = this;
 
 	this.puzzle          = [];
 	this.availableValues = [];
@@ -31,29 +35,29 @@ var solver = function()
 	this.solve = function(unsolvedPuzzle)
 	{
 		// Keep the puzzle, we will be filling in it's values
-		solver.puzzle = unsolvedPuzzle;
+		sudoku.puzzle = unsolvedPuzzle;
 
 		// Setup the available values for each cell. If a cell already has
 		// a number filled, then the available values for that cell will be
 		// a boolean false, indicating that the value should not be changed
-		for (var row in solver.puzzle)
+		for (var row in sudoku.puzzle)
 		{
-			solver.availableValues[row] = [];
+			sudoku.availableValues[row] = [];
 
-			for (var column in solver.puzzle)
+			for (var column in sudoku.puzzle)
 			{
 				// determine if the cell will have values
-				solver.availableValues[row][column] = [];
+				sudoku.availableValues[row][column] = [];
 
 				// Continue the loop if there will be no available values
-				if (solver.puzzle[row][column] !== 0)
+				if (sudoku.puzzle[row][column] !== 0)
 				{
-					solver.availableValues[row][column] = false;
+					sudoku.availableValues[row][column] = false;
 					continue;
 				}
 
 				// All numbers are valid for this cell, 1-9
-				solver.resetCellValues([row, column]);
+				sudoku.resetCellValues([row, column]);
 			}
 		}
 
@@ -66,12 +70,12 @@ var solver = function()
 		for (var index = 0; index < 9 * 9;)
 		{
 			// Calculate the row and column for this index
-			var cell   = solver.getCellByIndex(index),
+			var cell   = sudoku.getCellByIndex(index),
 			    row    = cell[0],
 			    column = cell[1];
 
 			// If this cell isn't mutable, continue to the next
-			if ( ! solver.isCellMutable(cell))
+			if ( ! sudoku.isCellMutable(cell))
 			{
 				++index;
 				continue;
@@ -81,28 +85,28 @@ var solver = function()
 			++iterations;
 
 			// Get a random value for this cell (if one is available)
-			var newValue = solver.getRandForCell(cell);
+			var newValue = sudoku.getRandForCell(cell);
 
 			// Make sure we have a valid value for this cell
 			if (newValue !== false)
 			{
 				// Determine if the value fits into the cell
-				if (solver.isValidValue(cell, newValue))
+				if (sudoku.isValidValue(cell, newValue))
 				{
 					// Set this as the value for the cell
-					solver.puzzle[row][column] = newValue;
+					sudoku.puzzle[row][column] = newValue;
 
 					// Move to the next cell in the table
 					++index;
 				}
 
 				// Remove the value from it's available list
-				solver.availableValues[row][column][newValue] = false;
+				sudoku.availableValues[row][column][newValue] = false;
 			}
 			else
 			{
 				// Reset the available values for this cell
-				solver.resetCellValues(cell);
+				sudoku.resetCellValues(cell);
 
 				// Backtrack to the most recent mutable cell
 				while (true)
@@ -115,14 +119,14 @@ var solver = function()
 						return false;
 
 					// Get the cell array of the previous cell
-					var previousCell = solver.getCellByIndex(index);
+					var previousCell = sudoku.getCellByIndex(index);
 
 					// Keep backtracking if this cell isn't mutable
-					if ( ! solver.isCellMutable(previousCell))
+					if ( ! sudoku.isCellMutable(previousCell))
 						continue;
 
 					// Clear the value of the previous cell
-					solver.puzzle[previousCell[0]][previousCell[1]] = 0;
+					sudoku.puzzle[previousCell[0]][previousCell[1]] = 0;
 
 					// Keep track of how many times we had to backtrack
 					++backtracks;
@@ -137,7 +141,7 @@ var solver = function()
 
 		// Compile a nice object with the solved information
 		return {
-			'puzzle'      : solver.puzzle,
+			'puzzle'      : sudoku.puzzle,
 			'iterations'  : iterations,
 			'backtracks'  : backtracks,
 			'runningTime' : endTime - startTime,
@@ -181,28 +185,28 @@ var solver = function()
 		var y = cell[0], x = cell[1];
 
 		// Ensure that the cell is a mutable cell
-		if ( ! solver.isCellMutable(cell))
+		if ( ! sudoku.isCellMutable(cell))
 			return false;
 
 		// Make sure that the value can even be used at all
-		if ( ! (value in solver.availableValues[y][x]))
+		if ( ! (value in sudoku.availableValues[y][x]))
 			return false;
 
 		// Test that the valued is available for this cell
-		if (solver.availableValues[y][x][value] === false)
+		if (sudoku.availableValues[y][x][value] === false)
 			return false;
 
 		// Test that the value is available for this row
-		for (var column in solver.puzzle[y])
+		for (var column in sudoku.puzzle[y])
 		{
-			if (value === solver.puzzle[y][column])
+			if (value === sudoku.puzzle[y][column])
 				return false;
 		}
 
 		// Test that the value is not in the column
-		for (var row in solver.puzzle)
+		for (var row in sudoku.puzzle)
 		{
-			if (value === solver.puzzle[row][x])
+			if (value === sudoku.puzzle[row][x])
 				return false;
 		}
 
@@ -215,7 +219,7 @@ var solver = function()
 		{
 			for (var j = squareX; j < squareX + 3; ++j)
 			{
-				if (value === solver.puzzle[i][j])
+				if (value === sudoku.puzzle[i][j])
 					return false;
 			}
 		}
@@ -239,15 +243,15 @@ var solver = function()
 		var y = cell[0], x = cell[1];
 
 		// Ignore cells that are immutable
-		if ( ! solver.isCellMutable(cell))
+		if ( ! sudoku.isCellMutable(cell))
 			return false;
 
 		// Build a list of the available values
 		var availableForRand = [];
 
-		for (var value in solver.availableValues[y][x])
+		for (var value in sudoku.availableValues[y][x])
 		{
-			if (solver.availableValues[y][x][value] === true)
+			if (sudoku.availableValues[y][x][value] === true)
 			{
 				availableForRand.push(parseInt(value));
 			}
@@ -276,17 +280,17 @@ var solver = function()
 		var y = cell[0], x = cell[1];
 
 		// Never reset immutable cells
-		if ( ! solver.isCellMutable(cell))
+		if ( ! sudoku.isCellMutable(cell))
 			return false;
 
 		// Set all values for this cell as available
 		for (var i = 1; i < 10; ++i)
 		{
-			solver.availableValues[y][x][i] = true;
+			sudoku.availableValues[y][x][i] = true;
 		}
 
 		// Set the value of the cell to zero (unknown)
-		solver.puzzle[y][x] = 0;
+		sudoku.puzzle[y][x] = 0;
 	};
 
 	/**
@@ -304,7 +308,7 @@ var solver = function()
 	{
 		var y = cell[0], x = cell[1];
 
-		return solver.availableValues[y][x] !== false
+		return sudoku.availableValues[y][x] !== false
 	};
 
 	/**
