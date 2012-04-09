@@ -6,7 +6,125 @@
 		<link rel="stylesheet" href="stylesheet/screen.css" />
 	</head>
 	<body>
+		<h1>Sudokuer</h1>
+		<h2>A Javascript Sudoku Solver</h2>
 
+		<form id="board">
+			<div class="sub-square">
+				<input type="text" name="value[0][0]" />
+				<input type="text" name="value[0][1]" />
+				<input type="text" name="value[0][2]" />
+				<input type="text" name="value[0][3]" />
+				<input type="text" name="value[0][4]" />
+				<input type="text" name="value[0][5]" />
+				<input type="text" name="value[0][6]" />
+				<input type="text" name="value[0][7]" />
+				<input type="text" name="value[0][8]" />
+				<input type="text" name="value[0][9]" />
+			</div>
+			<div class="sub-square">
+				<input type="text" name="value[1][0]" />
+				<input type="text" name="value[1][1]" />
+				<input type="text" name="value[1][2]" />
+				<input type="text" name="value[1][3]" />
+				<input type="text" name="value[1][4]" />
+				<input type="text" name="value[1][5]" />
+				<input type="text" name="value[1][6]" />
+				<input type="text" name="value[1][7]" />
+				<input type="text" name="value[1][8]" />
+				<input type="text" name="value[1][9]" />
+			</div>
+			<div class="sub-square">
+				<input type="text" name="value[2][0]" />
+				<input type="text" name="value[2][1]" />
+				<input type="text" name="value[2][2]" />
+				<input type="text" name="value[2][3]" />
+				<input type="text" name="value[2][4]" />
+				<input type="text" name="value[2][5]" />
+				<input type="text" name="value[2][6]" />
+				<input type="text" name="value[2][7]" />
+				<input type="text" name="value[2][8]" />
+				<input type="text" name="value[2][9]" />
+			</div>
+			<div class="sub-square">
+				<input type="text" name="value[3][0]" />
+				<input type="text" name="value[3][1]" />
+				<input type="text" name="value[3][2]" />
+				<input type="text" name="value[3][3]" />
+				<input type="text" name="value[3][4]" />
+				<input type="text" name="value[3][5]" />
+				<input type="text" name="value[3][6]" />
+				<input type="text" name="value[3][7]" />
+				<input type="text" name="value[3][8]" />
+				<input type="text" name="value[3][9]" />
+			</div>
+			<div class="sub-square">
+				<input type="text" name="value[4][0]" />
+				<input type="text" name="value[4][1]" />
+				<input type="text" name="value[4][2]" />
+				<input type="text" name="value[4][3]" />
+				<input type="text" name="value[4][4]" />
+				<input type="text" name="value[4][5]" />
+				<input type="text" name="value[4][6]" />
+				<input type="text" name="value[4][7]" />
+				<input type="text" name="value[4][8]" />
+				<input type="text" name="value[4][9]" />
+			</div>
+			<div class="sub-square">
+				<input type="text" name="value[5][0]" />
+				<input type="text" name="value[5][1]" />
+				<input type="text" name="value[5][2]" />
+				<input type="text" name="value[5][3]" />
+				<input type="text" name="value[5][4]" />
+				<input type="text" name="value[5][5]" />
+				<input type="text" name="value[5][6]" />
+				<input type="text" name="value[5][7]" />
+				<input type="text" name="value[5][8]" />
+				<input type="text" name="value[5][9]" />
+			</div>
+			<div class="sub-square">
+				<input type="text" name="value[6][0]" />
+				<input type="text" name="value[6][1]" />
+				<input type="text" name="value[6][2]" />
+				<input type="text" name="value[6][3]" />
+				<input type="text" name="value[6][4]" />
+				<input type="text" name="value[6][5]" />
+				<input type="text" name="value[6][6]" />
+				<input type="text" name="value[6][7]" />
+				<input type="text" name="value[6][8]" />
+				<input type="text" name="value[6][9]" />
+			</div>
+			<div class="sub-square">
+				<input type="text" name="value[7][0]" />
+				<input type="text" name="value[7][1]" />
+				<input type="text" name="value[7][2]" />
+				<input type="text" name="value[7][3]" />
+				<input type="text" name="value[7][4]" />
+				<input type="text" name="value[7][5]" />
+				<input type="text" name="value[7][6]" />
+				<input type="text" name="value[7][7]" />
+				<input type="text" name="value[7][8]" />
+				<input type="text" name="value[7][9]" />
+			</div>
+			<div class="sub-square">
+				<input type="text" name="value[8][0]" />
+				<input type="text" name="value[8][1]" />
+				<input type="text" name="value[8][2]" />
+				<input type="text" name="value[8][3]" />
+				<input type="text" name="value[8][4]" />
+				<input type="text" name="value[8][5]" />
+				<input type="text" name="value[8][6]" />
+				<input type="text" name="value[8][7]" />
+				<input type="text" name="value[8][8]" />
+				<input type="text" name="value[8][9]" />
+			</div>
+		</form>
+
+		<div id="actions">
+			<a id="generate" href="javascript:;">Generate A Puzzle</a>
+			<a id="solve" href="javascript:;">Solve A Puzzle</a>
+			<a id="tests" href="javascript:;">Conduct Tests</a>
+		</div>
 
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 		<script src="javascript/sudoku.js"></script>
