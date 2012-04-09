@@ -27,4 +27,31 @@ $(function()
 		return puzzle;
 	};
 
+	/**
+	 * Set the input elements on the puzzle
+	 * board to the values defined in the 2D
+	 * puzzle array where zero values are empty
+	 * cells and all other values are set
+	 *
+	 * @param {Array} puzzle The puzzle to fill in to the form
+	 */
+	var setPuzzleForm = function(puzzle)
+	{
+		// Iterate over the puzzle
+		for (var row in puzzle)
+		{
+			for (var column in puzzle[row])
+			{
+				// Get the input element for this cell
+				var inputName = 'value['+row+']['+column+']';
+				var inputCell = board.find('input[name="'+inputName+'"]')[0];
+				var cellValue = puzzle[row][column];
+
+				// For cells with zero values empty them
+				inputCell.value = cellValue === 0 ? '' : cellValue;
+			}
+		}
+	};
+
+
 });
