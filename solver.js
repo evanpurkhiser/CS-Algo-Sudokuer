@@ -221,7 +221,7 @@ var solver = function()
 		}
 
 		return true;
-	}
+	};
 
 	/**
 	 * Get a random value from the list of available
@@ -261,7 +261,7 @@ var solver = function()
 		var randIndex = Math.floor(Math.random() * availableForRand.length);
 
 		return availableForRand[randIndex];
-	}
+	};
 
 	/**
 	 * Reset the available values for a given cell
@@ -287,7 +287,7 @@ var solver = function()
 
 		// Set the value of the cell to zero (unknown)
 		solver.puzzle[y][x] = 0;
-	}
+	};
 
 	/**
 	 * Determine if a given cell is mutable. That is the
@@ -305,7 +305,7 @@ var solver = function()
 		var y = cell[0], x = cell[1];
 
 		return solver.availableValues[y][x] !== false
-	}
+	};
 
 	/**
 	 * Given an index from 0-80 return the cell
@@ -317,7 +317,7 @@ var solver = function()
 	this.getCellByIndex = function(index)
 	{
 		return [Math.floor(index / 9), index % 9];
-	}
+	};
 
 	// Make the solve method public
 	return {'solve' : this.solve};
