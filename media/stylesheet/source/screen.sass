@@ -6,7 +6,7 @@ html
 body
 	width: 960px
 	margin: 50px auto
-	font-family: 'Droid Sans'
+	font: 14px 'Droid Sans'
 
 	h1, h2
 		margin: 0
@@ -27,13 +27,13 @@ body
 	margin: 20px auto
 	width: 456px
 	overflow: hidden
-	border: 1px solid #000
+	border: 1px solid #888
 	outline: 1px solid #FFF
-	box-shadow: 0 0 20px #eee
+	box-shadow: 0 0 20px #EEE
 
 	.sub-square
 		float: left
-		border: 2px solid #222
+		border: 2px solid #888
 		width: 150px
 		overflow: hidden
 		margin: -1px
@@ -42,17 +42,39 @@ body
 		float: left
 		width: 50px
 		padding: 0
-		border: 1px solid #888
+		border: 1px solid #aaa
 		margin: -1px
 		outline: none
 		background: #FFF
 		text-align: center
 		font: 30px 'Droid Sans'
 		line-height: 50px
-		color: #000
+		color: #555
 
 #actions
-	display: none
+	margin: 20px 0
+	text-align: center
+
+	a
+		display: inline-block
+		margin: 0 8px
+		line-height: 1
+		font-size: 13px
+		padding: 6px 12px
+		text-decoration: none
+		border: 1px solid #CCC
+		border-bottom: 1px solid #BBB
+		border-radius: 3px
+		color: #666
+		text-shadow: 0 1px 0 #FFF
+		box-shadow: 0 1px 5px #DDD
+		background: -webkit-linear-gradient(top, #EEE, #DDD)
+
+		&:hover
+			border: 1px solid #BBB
+			border-bottom: 1px solid #AAA
+			background: -webkit-linear-gradient(top, #EEE, #DADADA)
+
 
 #github
 	display: block
