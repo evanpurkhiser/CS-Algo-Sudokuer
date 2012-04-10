@@ -201,7 +201,7 @@ var sudoku = function()
 
 	/**
 	 * Determine if a given value is an acceptable
-	 * value to be filled into a cell. There are five
+	 * value to be filled into a cell. There are three
 	 * conditions that a value must meet in order for
 	 * the value for be a valid number for a given cell
 	 *
@@ -214,15 +214,8 @@ var sudoku = function()
 	 *     it has already been tried in that cell and was
 	 *     an invalid value.
 	 *
-	 *  3. The value currently exists only once in the given
-	 *     row of the cell.
-	 *
-	 *  4. The value currently exists only once in the given
-	 *     column of the cell
-	 *
-	 *  5. The value currently exists only once in the sudoku
-	 *     square that the cell falls into. This is a 3x3
-	 *     square the exists as a super set of the cells
+	 *  3. The value is a valid move to make in the game of
+	 *     sudoku and can be made without consequence
 	 *
 	 * If all these conditions are matched, than the value
 	 * can be placed into the cell
@@ -247,17 +240,56 @@ var sudoku = function()
 		if (sudoku.availableValues[y][x][value] === false)
 			return false;
 
+		if ( ! sudoku.isValidSudoku(cell, value))
+			return false;
+
+		return true;
+	};
+
+	/**
+	 * This method determins if entering a certian value
+	 * into a cell would be considered a valid sudoku
+	 * move that does not violate the three rules
+	 *
+	 *  1. The value currently exists only once in the given
+	 *     row of the cell.
+	 *
+	 *  2. The value currently exists only once in the given
+	 *     column of the cell
+	 *
+	 *  3. The value currently exists only once in the sudoku
+	 *     square that the cell falls into. This is a 3x3
+	 *     square the exists as a super set of the cells
+	 *
+	 * If no value is provided, ther current value in the cell
+	 * will be used to test if it's a valid sudoku move
+	 *
+	 * @param  {Arrray}  cell  The cell given as an array of [y, x]
+	 * @param  {Integer} value The value to check for cell validity
+	 * @return {Boolean}       Weather the value makes a valid sudoku
+	 */
+	this.isValidSudoku = function(cell, value)
+	{
+		var y = cell[0], x = cell[1];
+
+		// If no value is given, check that the current value is valid
+		value = value || sudoku.puzzle[y][x];
+
+		// Ignore empty cells, these cells are always valid
+		if (value === 0)
+			return true;
+
 		// Test that the value is available for this row
 		for (var column in sudoku.puzzle[y])
 		{
-			if (value === sudoku.puzzle[y][column])
+			if (value === sudoku.puzzle[y][column] && column != x)
 				return false;
 		}
 
 		// Test that the value is not in the column
 		for (var row in sudoku.puzzle)
 		{
-			if (value === sudoku.puzzle[row][x])
+			if (value === sudoku.puzzle[row][x] && row != y)
 				return false;
 		}
 
@@ -266,11 +298,11 @@ var sudoku = function()
 		    squareX = Math.floor(x / 3) * 3;
 
 		// Determine if the value exists in the square
-		for (var i = squareY; i < squareY + 3; ++i)
+		for (var row = squareY; row < squareY + 3; ++row)
 		{
-			for (var j = squareX; j < squareX + 3; ++j)
+			for (var column = squareX; column < squareX + 3; ++column)
 			{
-				if (value === sudoku.puzzle[i][j])
+				if (value === sudoku.puzzle[row][column] && row != y && column != x)
 					return false;
 			}
 		}
