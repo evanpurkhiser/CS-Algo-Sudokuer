@@ -65,5 +65,13 @@ $(function()
 		board.setPuzzle(sudoku.generate());
 	});
 
+	$('#solve').bind('click', function()
+	{
+		// Solve the puzzle and get the resultant object
+		var solved = sudoku.solve(board.getPuzzle());
+
+		// Set the board to the solved puzzle
+		board.setPuzzle(solved.puzzle);
+	});
 
 });
