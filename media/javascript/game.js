@@ -9,7 +9,7 @@ $(function()
 	 *
 	 * @return {Array} The puzzle board
 	 */
-	var getPuzzleForm = function()
+	board.getPuzzle = function()
 	{
 		// Setup the new puzzle array in here
 		var puzzle = [[], [], [], [], [], [], [], [], []];
@@ -35,7 +35,7 @@ $(function()
 	 *
 	 * @param {Array} puzzle The puzzle to fill in to the form
 	 */
-	var setPuzzleForm = function(puzzle)
+	board.setPuzzle = function(puzzle)
 	{
 		// Iterate over the puzzle
 		for (var row in puzzle)
@@ -52,6 +52,18 @@ $(function()
 			}
 		}
 	};
+
+	/**
+	 * When clicking the 'Generate A Puzzle' button
+	 * use the sudoku object to generate a random
+	 * puzzle array and then save set the board to the
+	 * puzzle array
+	 */
+	$('#generate').bind('click', function()
+	{
+		// Generate a puzzle and set the board to it
+		board.setPuzzle(sudoku.generate());
+	});
 
 
 });
