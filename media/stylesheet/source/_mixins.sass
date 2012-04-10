@@ -1,0 +1,14 @@
+@mixin border-radius($size: 0)
+	-moz-border-radius: $size
+	-webkit-border-radius: $size
+	border-radius: $size
+
+@mixin box-shadow($box-shadow)
+	-webkit-box-shadow: $box-shadow
+	-moz-box-shadow: $box-shadow
+	box-shadow: $box-shadow
+
+@mixin box-gradient($color1, $color2)
+	background-color: $color2
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from($color1), to($color2))
+	background-image: -moz-linear-gradient(center top, $color1, $color2)

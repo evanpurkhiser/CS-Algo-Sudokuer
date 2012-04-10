@@ -1,4 +1,5 @@
 @import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz|Droid+Sans)
+@import 'mixins'
 
 html
 	background: url(../images/background.png)
@@ -64,16 +65,15 @@ body
 		text-decoration: none
 		border: 1px solid #CCC
 		border-bottom: 1px solid #BBB
-		border-radius: 3px
 		color: #666
 		text-shadow: 0 1px 0 #FFF
-		box-shadow: 0 1px 5px #DDD
-		background: -webkit-linear-gradient(top, #EEE, #DDD)
+		+box-gradient(#EEE, #DDD)
+		+border-radius(3px)
 
 		&:hover
 			border: 1px solid #BBB
 			border-bottom: 1px solid #AAA
-			background: -webkit-linear-gradient(top, #EEE, #DADADA)
+			+box-gradient(#EEE, #DADADA)
 
 
 #github
