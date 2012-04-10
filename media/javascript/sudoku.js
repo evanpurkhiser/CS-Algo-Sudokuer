@@ -37,6 +37,9 @@ var sudoku = function()
 		// Keep the puzzle, we will be filling in it's values
 		sudoku.puzzle = unsolvedPuzzle;
 
+		// Clear the available values
+		sudoku.availableValues = [];
+
 		// Setup the available values for each cell. If a cell already has
 		// a number filled, then the available values for that cell will be
 		// a boolean false, indicating that the value should not be changed
@@ -61,13 +64,20 @@ var sudoku = function()
 			}
 		}
 
+		// Make sure that the unsolved puzzle is valid before solving it
+		for (var index = 0; index < 81; ++index)
+		{
+			if ( ! sudoku.isValidSudoku(sudoku.getCellByIndex(index)))
+				return false;
+		}
+
 		// Keep track of the iterations and start time
 		var iterations = 0,
 		    backtracks = 0,
 		    startTime  = new Date().getTime();
 
 		// Begin iterating horizontally over the puzzle filling the cells
-		for (var index = 0; index < 9 * 9;)
+		for (var index = 0; index < 81;)
 		{
 			// Calculate the row and column for this index
 			var cell   = sudoku.getCellByIndex(index),
