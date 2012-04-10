@@ -205,9 +205,9 @@ var sudoku = function()
 	 * conditions that a value must meet in order for
 	 * the value for be a valid number for a given cell
 	 *
-	 *  1. The value must not be false in the list of
+	 *  1. The cell must not be false in the list of
 	 *     available values, if it is false, this indicates
-	 *     that the value is immutable and cannot be changed
+	 *     that the cell is immutable and cannot be changed
 	 *
 	 *  2. The value must be true in the `availableValues`
 	 *     list for that cell, if it is not in the list then
