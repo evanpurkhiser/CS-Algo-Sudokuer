@@ -1,15 +1,13 @@
 /**
- * Singleton puzzle solver and generator object
+ * Singleton puzzle solver object
  *
- * This object is used to solve and generate sudoku
- * puzzles. Two methods are exposed, solve and generate.
+ * This object is used to solve sudoku puzzles. A
+ * single solve method is exposed on the sudoku object
  *
  * solve accepts a two dimensional array of sudoku
  * cell values, where empty cells are defined as any
  * cell that contains the value zero.
  *
- * generate accepts no values but will return a unsolved
- * puzzle.
  */
 var sudoku = function()
 {
@@ -156,57 +154,6 @@ var sudoku = function()
 			'backtracks'  : backtracks,
 			'runningTime' : endTime - startTime,
 		};
-	};
-
-	/**
-	 * Generate a sudoku puzzle that is not gaurenteed to be
-	 * unique by genrating a random sudoku board and then
-	 * subsiquently removing random values from the board.
-	 * The puzzles generated are NOT gaurenteed to be unique
-	 * as we are not checking if more than one solution exists
-	 * after removing each number, we are simpley removing
-	 * values from the board to give the solver something to do
-	 *
-	 * @return {Array} The generated puzzle board
-	 */
-	this.generate = function()
-	{
-		// Create a empty board
-		var emptyBoard = [];
-
-		for (var i = 0; i < 9; ++i)
-		{
-			emptyBoard[i] = [];
-
-			for (var j = 0; j < 9; ++j)
-			{
-				emptyBoard[i][j] = 0;
-			}
-		}
-
-		// Solve the board to get a random completed puzzle
-		var newBoard = sudoku.solve(emptyBoard).puzzle;
-
-		// Decide how many numbers to remove (between 46 to 66 numbers)
-		var cellsToRemove = Math.floor(46 + Math.random() * 20);
-
-		// Remove the cells from the puzzle
-		while (cellsToRemove > 0)
-		{
-			// Get a random cell to remove valeus from
-			var cell = sudoku.getCellByIndex(Math.floor(Math.random() * 81));
-
-			// Make sure the cell isn't empty
-			if (newBoard[cell[0]][cell[1]] !== 0)
-			{
-				--cellsToRemove;
-
-				// Empty the cell from the board
-				newBoard[cell[0]][cell[1]] = 0;
-			}
-		}
-
-		return newBoard;
 	};
 
 	/**
