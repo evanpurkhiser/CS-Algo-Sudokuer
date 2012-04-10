@@ -54,15 +54,15 @@ $(function()
 	};
 
 	/**
-	 * When clicking the 'Generate A Puzzle' button
-	 * use the sudoku object to generate a random
-	 * puzzle array and then save set the board to the
-	 * puzzle array
+	 * When clicking the "Load a puzzle" button
+	 * get a random puzzle from the list of puzzles
+	 * in the sudoku puzzles object and set the board
+	 * to the random puzzle
 	 */
-	$('#generate').bind('click', function()
+	$('#load').bind('click', function()
 	{
-		// Generate a puzzle and set the board to it
-		board.setPuzzle(sudoku.generate());
+		// Load a puzzle and set the board to the puzzle
+		board.setPuzzle(sudokuPuzzles.getRandom());
 	});
 
 	$('#solve').bind('click', function()
