@@ -1,3 +1,5 @@
+* NOTE: This readme is out of date and needs rewritten, please refer to the actual code!*
+
 ## Sudokuer
 
 A very rudimentary and basic [Sudoku](http://en.wikipedia.org/wiki/Sudoku) puzzle
