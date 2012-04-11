@@ -95,6 +95,17 @@ $(function()
 		// Get the runtimeTests element (and show it)
 		var runtimeTests = $('#runtime-tests').show();
 
+		// Stop the testing if we click again while testing
+		if (board.runtimeTestRef)
+		{
+			clearInterval(board.runtimeTestRef);
+			board.runtimeTestRef = false;
+			board.find('input').val('');
+			runtimeTests.hide();
+
+			return false;
+		}
+
 		// Setup the variables to display and keep track of
 		var iterations       = 0,
 		    min              = 9007199254740992,
@@ -109,7 +120,7 @@ $(function()
 		    avgElement       = runtimeTests.find('.avg-time .value')[0];
 
 		// Do many iterations
-		setInterval(function()
+		board.runtimeTestRef = setInterval(function()
 		{
 			++iterations;
 
