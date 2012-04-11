@@ -56,7 +56,7 @@ sudoku.solve = function(puzzle, index)
 			// Solve the next cell in the puzzel
 			var newPuzzle = sudoku.solve(puzzle, index + 1);
 
-			// Move to the next cell and recursively solve it
+			// If we solved the puzzle then return it
 			if (newPuzzle !== false)
 				return newPuzzle;
 
@@ -66,6 +66,6 @@ sudoku.solve = function(puzzle, index)
 		}
 	}
 
-	// Unable to solve the puzzel
+	// Unable to solve the puzzel from this cell
 	return false;
 }
