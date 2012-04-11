@@ -1,95 +1,79 @@
 /**
- * Singleton puzzle solver object
+ * Sudoku solver. Solves sudoku puzzles
+ * recursively using brute-force backtracking.
  *
- * This object is used to solve sudoku puzzles. A
- * single solve method is exposed on the sudoku object
+ * The given puzzle should be an array of integer values
+ * where the '0' value represents an unsolved cell in the
+ * puzzel. The returned puzzel will be in the same format
  *
- * solve accepts a two dimensional array of sudoku
- * cell values, where empty cells are defined as any
- * cell that contains the value zero.
- *
+ * @param  {Array}   puzzle The partially solved puzzel
+ * @param  {Integer} index  The current cell to solve
+ * @return {Array}          The solved puzzel, or false if
+ *                          the puzzel is unable to be solved
  */
-var sudoku = function()
+sudokuSolver = function(puzzle, index)
 {
+	// Start from cell 0 of the puzzle
+	index = index || 0;
 
-	this.recursiveSolver = function(puzzle)
+	// Make sure this cell hasn't already been given to us
+	while (puzzle[index] != 0 && puzzle[index] !== undefined)
+		++index;
+
+	// Return the puzzel after we solve it
+	if (index > 80)
+		return puzzle;
+
+	// Figure out what numbers this cell cannot be
+	var invalidValues = [];
+
+	// Add invalid values in the column, row, and square
+	// These are the constraints for backtracking
+	for (var i = 0; i < 9; ++i)
 	{
-		var row = 0, column = 0;
+		// Add values from this column
+		invalidValues[puzzle[(index % 9) + (i * 9)]] = true;
 
-		// Find the row and column that hasn't been solved yet
-		for (var i = 0;; ++i)
-		{
-			// The puzzle is solved
-			if (i > 80)
-				return puzzle
+		// Add values from this row
+		invalidValues[puzzle[(Math.floor(index / 9) * 9) + i]] = true;
 
-			// Get the row and column for this index
-			row = Math.floor(i / 9);
-			column = i % 9;
-
-			//
-			if (puzzle[row][column] === 0)
-				break;
-		}
-
-		// Figure out what numbers can go in this cell
-		var invalidValues = [];
-
-		// Check the columns and rows
-		for (var i = 0; i < 9; ++i)
-		{
-			invalidValues[puzzle[row][i]]    = true;
-			invalidValues[puzzle[i][column]] = true;
-		}
-
-		// Check the numbers square
-		var bx = Math.floor(row / 3) * 3;
-		var by = Math.floor(column / 3) * 3;
-
-		for (var i = 0; i < 3; ++i)
-		{
-			for (var j = 0; j < 3; ++j)
-			{
-				invalidValues[puzzle[bx+i][by+j]] = true;
-			}
-		}
-
-		// Try the values 1-9 for this square
-		for (var i = 1; i < 10; ++i)
-		{
-			// Make sure we can put this value in the square
-			if (invalidValues[i] !== true)
-			{
-				// Set the value for this cell
-				puzzle[row][column] = i;
-
-				var newPuzzle = recursiveSolver(puzzle)
-
-				// Move to the next cell and recursively solve it
-				if (newPuzzle !== false)
-					return newPuzzle
-
-				// If We had trouble solving the next cell then reset this cell and
-				// let the loop iterate so we can try with the next value
-				puzzle[row][column] = 0;
-			}
-		}
-
-		return false;
+		// Add values from the sub-square
+		invalidValues[puzzle[HERE]] = true;
 	}
 
-	return this.recursiveSolver;
-}();
+	// Try the values 1-9 for this square
+	for (var value = 1; value < 10; ++value)
+	{
+		// Make sure we can put this value in the square
+		if (invalidValues[value] !== true)
+		{
+			// Set the value for this cell
+			puzzle[index] = value;
 
-var veryHard = [];
-veryHard[0] = [1, 0, 0, 0, 0, 7, 0, 9, 0]; // [1, 6, 2, 8, 5, 7, 4, 9, 3]
-veryHard[1] = [0, 3, 0, 0, 2, 0, 0, 0, 8]; // [5, 3, 4, 1, 2, 9, 6, 7, 8]
-veryHard[2] = [0, 0, 9, 6, 0, 0, 5, 0, 0]; // [7, 8, 9, 6, 4, 3, 5, 2, 1]
-veryHard[3] = [0, 0, 5, 3, 0, 0, 9, 0, 0]; // [4, 7, 5, 3, 1, 2, 9, 8, 6]
-veryHard[4] = [0, 1, 0, 0, 8, 0, 0, 0, 2]; // [9, 1, 3, 5, 8, 6, 7, 4, 2]
-veryHard[5] = [6, 0, 0, 0, 0, 4, 0, 0, 0]; // [6, 2, 8, 7, 9, 4, 1, 3, 5]
-veryHard[6] = [3, 0, 0, 0, 0, 0, 0, 1, 0]; // [3, 5, 6, 4, 7, 8, 2, 1, 9]
-veryHard[7] = [0, 4, 0, 0, 0, 0, 0, 0, 7]; // [2, 4, 1, 9, 3, 5, 8, 6, 7]
-veryHard[8] = [0, 0, 7, 0, 0, 0, 3, 0, 0]; // [8, 9, 7, 2, 6, 1, 3, 5, 4]
+			// Solve the next cell in the puzzel
+			var newPuzzle = sudokuSolver(puzzle, index + 1);
 
-console.log(sudoku(veryHard));
+			// Move to the next cell and recursively solve it
+			if (newPuzzle !== false)
+				return newPuzzle;
+
+			// If we had trouble solving the next cell then reset this cell and
+			// let the loop iterate so we can try with the next value for the cell
+			puzzle[index] = 0;
+		}
+	}
+
+	// Unable to solve the puzzel
+	return false;
+}
+
+
+
+
+// Convert the puzzle to a array of ints
+var puzzle = '000502700000600001004000200000008046600000009190700000007000500400009000003801000'
+	.split('')
+	.map(function(num) {return parseInt(num)});
+
+// Solve the puzzel
+console.log(sudokuSolver(puzzle));
