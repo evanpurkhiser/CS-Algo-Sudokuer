@@ -37,8 +37,9 @@ sudokuSolver = function(puzzle, index)
 		// Add values from this row
 		invalidValues[puzzle[(Math.floor(index / 9) * 9) + i]] = true;
 
-		// Add values from the sub-square
-		invalidValues[puzzle[HERE]] = true;
+		// Add values from the subsquare of the problem
+		invalidValues[puzzle[index - ((Math.floor(index / 9) % 3) * 9) -
+			(index % 3) + (Math.floor(i / 3) * 9) + (i % 3)]] = true;
 	}
 
 	// Try the values 1-9 for this square
@@ -66,14 +67,3 @@ sudokuSolver = function(puzzle, index)
 	// Unable to solve the puzzel
 	return false;
 }
-
-
-
-
-// Convert the puzzle to a array of ints
-var puzzle = '000502700000600001004000200000008046600000009190700000007000500400009000003801000'
-	.split('')
-	.map(function(num) {return parseInt(num)});
-
-// Solve the puzzel
-console.log(sudokuSolver(puzzle));
