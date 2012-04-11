@@ -1,3 +1,5 @@
+var sudoku = sudoku || {};
+
 /**
  * Sudoku solver. Solves sudoku puzzles
  * recursively using brute-force backtracking.
@@ -11,7 +13,7 @@
  * @return {Array}          The solved puzzel, or false if
  *                          the puzzel is unable to be solved
  */
-sudokuSolver = function(puzzle, index)
+sudoku.solve = function(puzzle, index)
 {
 	// Start from cell 0 of the puzzle
 	index = index || 0;
@@ -52,7 +54,7 @@ sudokuSolver = function(puzzle, index)
 			puzzle[index] = value;
 
 			// Solve the next cell in the puzzel
-			var newPuzzle = sudokuSolver(puzzle, index + 1);
+			var newPuzzle = sudoku.solve(puzzle, index + 1);
 
 			// Move to the next cell and recursively solve it
 			if (newPuzzle !== false)
