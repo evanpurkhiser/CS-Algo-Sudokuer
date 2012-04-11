@@ -97,13 +97,24 @@ $(function()
 		// Stop the testing if we click again while testing
 		if (board.runtimeTestRef)
 		{
+			// Set the button text to the start text
+			$(this).text($(this).data('start-text'));
+
+			// Stop the runtime tests
 			clearInterval(board.runtimeTestRef);
 			board.runtimeTestRef = false;
+
+			// Clear the board
 			board.find('input').val('');
-			runtimeTests.hide();
+
+			// Hide the runtime tests display
+			runtimeTests.fadeOut();
 
 			return false;
 		}
+
+		// Set the text on the button to the stop text
+		$(this).text($(this).data('stop-text'));
 
 		// Setup the variables to display and keep track of
 		var iterations       = 0,
@@ -118,7 +129,7 @@ $(function()
 		    maxElement       = runtimeTests.find('.max-time .value')[0],
 		    avgElement       = runtimeTests.find('.avg-time .value')[0];
 
-		// Do many iterations
+		// Do many iterations (but don't freeze the browser)
 		board.runtimeTestRef = setInterval(function()
 		{
 			++iterations;
