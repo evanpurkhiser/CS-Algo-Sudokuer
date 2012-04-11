@@ -86,12 +86,55 @@ $(function()
 	});
 
 	/**
-	 * When clicking on the "Clear the board" button
-	 * reset all of the input values on the board
+	 * When clicking the "Start Runtime Tests" button
+	 * the solver will display the runtime tests overlay
+	 * and begin solving many puzzels
 	 */
-	$('#clear').bind('click', function()
+	$('#test').bind('click', function()
 	{
-		board.find('input').val('');
+		// Get the runtimeTests element (and show it)
+		var runtimeTests = $('#runtime-tests').show();
+
+		// Setup the variables to display and keep track of
+		var iterations       = 0,
+		    min              = 9007199254740992,
+		    max              = 0,
+		    average          = 0,
+		    totalTime        = 0,
+		    start            = 0,
+		    duration         = 0,
+		    iterationElement = runtimeTests.find('.iterations .value')[0],
+		    minElement       = runtimeTests.find('.min-time .value')[0],
+		    maxElement       = runtimeTests.find('.max-time .value')[0],
+		    avgElement       = runtimeTests.find('.avg-time .value')[0];
+
+		// Do many iterations
+		setInterval(function()
+		{
+			++iterations;
+
+			// Load a puzzel to solve
+			var puzzel = sudoku.getRandomPuzzel();
+
+			// Solve with a time test
+			start    = new Date().getTime();
+			puzzel   = sudoku.solve(puzzel);
+			duration = new Date().getTime() - start;
+
+			// Set the puzzel to the board for extra cool effects
+			board.setPuzzle(puzzel);
+
+			// Calculate the min, max, and average time
+			min = Math.min(min, duration);
+			max = Math.max(max, duration);
+			avg = Math.round((totalTime += duration) / iterations * 100) / 100;
+
+			// Set the values on the runtime tests
+			iterationElement.innerHTML = iterations;
+			minElement.innerHTML       = min + 'ms';
+			maxElement.innerHTML       = max + 'ms';
+			avgElement.innerHTML       = avg + 'ms';
+		});
 	});
 
 	/**
