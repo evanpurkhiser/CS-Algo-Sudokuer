@@ -29,7 +29,8 @@ body
 	width: 456px
 	overflow: hidden
 	border: 1px solid #888
-	box-shadow: 0 0 20px #EEE
+	position: relative
+	+box-shadow(0 0 20px #EEE)
 
 	.sub-square
 		float: left
@@ -74,6 +75,49 @@ body
 			border: 1px solid #BBB
 			border-bottom: 1px solid #AAA
 			+box-gradient(#EEE, #DADADA)
+
+#alert, #runtime-tests
+	position: absolute
+	top: 8px
+	left: 8px
+	width: 430px
+	padding: 0 5px
+	background: rgba(0, 0, 0, 0.8)
+	+border-radius(3px)
+
+#alert
+	display: none
+
+#runtime-tests
+
+	> div
+		float: left
+		margin: 15px 10px
+
+	h2
+		font-size: 13px
+		color: #CCC
+		text-shadow: 0 1px 0 #000
+		margin: 4px 0
+		text-align: left
+
+	.value
+		line-height: 40px
+
+	.iterations
+		width: 110px
+
+		.value
+			font-size: 36px
+			color: #B0FB4F
+			overflow: hidden
+			text-overflow: ellipsis
+
+	.min-time, .max-time, .avg-time
+		width: 80px
+
+		.value
+			color: #FFF
 
 
 #github
