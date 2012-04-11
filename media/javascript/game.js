@@ -57,15 +57,11 @@ $(function()
 	 */
 	$('#load').bind('click', function()
 	{
-		var puzzel = sudoku.getRandomPuzzel();
-
-		console.log(puzzel);
+		if (board.runtimeTestRef)
+			return;
 
 		// Load a puzzle and set the board to the puzzle
-		board.setPuzzle(puzzel);
-
-
-		console.log(board.getPuzzle());
+		board.setPuzzle(sudoku.getRandomPuzzel());
 	});
 
 	/**
@@ -78,6 +74,9 @@ $(function()
 	 */
 	$('#solve').bind('click', function()
 	{
+		if (board.runtimeTestRef)
+			return;
+
 		// Solve the puzzle and get the resultant object
 		var solved = sudoku.solve(board.getPuzzle());
 
