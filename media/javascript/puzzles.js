@@ -262,7 +262,7 @@ var sudokuPuzzles = function()
 		var randomIndex = Math.floor(Math.random() * puzzleList.length);
 
 		// Convert the puzzle string into a puzzle array
-		var puzzle = [[],[],[],[],[],[],[],[],[]];
+		var puzzle = [[], [], [], [], [], [], [], [], []];
 
 		for (var index = 0; index < 81; ++index)
 		{

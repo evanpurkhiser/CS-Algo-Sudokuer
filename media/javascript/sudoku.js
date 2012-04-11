@@ -16,6 +16,83 @@ var sudoku = function()
 	this.puzzle          = [];
 	this.availableValues = [];
 
+
+	this.solveRecursively = function(unsolvedPuzzle)
+	{
+		sudoku.puzzle = unsolvedPuzzle;
+
+		if (sudoku.recursiveSolver())
+		{
+			return sudoku.puzzle;
+		}
+
+		return false;
+	}
+
+	this.recursiveSolver = function()
+	{
+		var row = 0, column = 0;
+
+		// Find the row and column that hasn't been solved yet
+		for (var i = 0;; ++i)
+		{
+			// The puzzle is solved
+			if (i > 80)
+				return true
+
+			// Get the row and column for this index
+			row = Math.floor(i / 9);
+			column = i % 9;
+
+			//
+			if (sudoku.puzzle[row][column] === 0)
+				break;
+		}
+
+		// Figure out what numbers can go in this cell
+		var invalidValues = [];
+
+		// Check the columns and rows
+		for (var i = 0; i < 9; ++i)
+		{
+			invalidValues[sudoku.puzzle[row][i]]    = true;
+			invalidValues[sudoku.puzzle[i][column]] = true;
+		}
+
+		// Check the numbers square
+		var bx = Math.floor(row / 3) * 3;
+		var by = Math.floor(column / 3) * 3;
+
+		for (var i = 0; i < 3; ++i)
+		{
+			for (var j = 0; j < 3; ++j)
+			{
+				invalidValues[sudoku.puzzle[bx+i][by+j]] = true;
+			}
+		}
+
+		// Try the values 1-9 for this square
+		for (var i = 1; i < 10; ++i)
+		{
+			// Make sure we can put this value in the square
+			if (invalidValues[i] !== true)
+			{
+				// Set the value for this cell
+				sudoku.puzzle[row][column] = i;
+
+				// Move to the next cell and recursively solve it
+				if (sudoku.recursiveSolver())
+					return true
+
+				// If We had trouble solving the next cell then reset this cell and
+				// let the loop iterate so we can try with the next value
+				sudoku.puzzle[row][column] = 0;
+			}
+		}
+
+		return false;
+	}
+
 	/**
 	 * Solve a sudoku puzzle using backtracking.
 	 * A puzzle should be given as a two dimensional
@@ -365,7 +442,7 @@ var sudoku = function()
 
 	// Make the solve method public
 	return {
-		'solve'    : this.solve,
-		'generate' : this.generate,
+		'iterativeSolve' : this.solve,
+		'recursiveSolve' : this.solveRecursively,
 	};
 }();

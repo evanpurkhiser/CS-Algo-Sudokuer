@@ -76,13 +76,10 @@ $(function()
 	$('#solve').bind('click', function()
 	{
 		// Solve the puzzle and get the resultant object
-		var solved = sudoku.solve(board.getPuzzle());
+		var solved = sudoku.recursiveSolve(board.getPuzzle());
 
 		// Set the board to the solved puzzle
-		board.setPuzzle(solved.puzzle);
-
-		// Alert how long the solution took
-		alert('Puzzle solved in ' + solved.runningTime + 'ms');
+		board.setPuzzle(solved);
 	});
 
 	/**
