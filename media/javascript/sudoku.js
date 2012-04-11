@@ -11,25 +11,8 @@
  */
 var sudoku = function()
 {
-	var sudoku = this;
 
-	this.puzzle          = [];
-	this.availableValues = [];
-
-
-	this.solveRecursively = function(unsolvedPuzzle)
-	{
-		sudoku.puzzle = unsolvedPuzzle;
-
-		if (sudoku.recursiveSolver())
-		{
-			return sudoku.puzzle;
-		}
-
-		return false;
-	}
-
-	this.recursiveSolver = function()
+	this.recursiveSolver = function(puzzle)
 	{
 		var row = 0, column = 0;
 
@@ -38,14 +21,14 @@ var sudoku = function()
 		{
 			// The puzzle is solved
 			if (i > 80)
-				return true
+				return puzzle
 
 			// Get the row and column for this index
 			row = Math.floor(i / 9);
 			column = i % 9;
 
 			//
-			if (sudoku.puzzle[row][column] === 0)
+			if (puzzle[row][column] === 0)
 				break;
 		}
 
@@ -55,8 +38,8 @@ var sudoku = function()
 		// Check the columns and rows
 		for (var i = 0; i < 9; ++i)
 		{
-			invalidValues[sudoku.puzzle[row][i]]    = true;
-			invalidValues[sudoku.puzzle[i][column]] = true;
+			invalidValues[puzzle[row][i]]    = true;
+			invalidValues[puzzle[i][column]] = true;
 		}
 
 		// Check the numbers square
@@ -67,7 +50,7 @@ var sudoku = function()
 		{
 			for (var j = 0; j < 3; ++j)
 			{
-				invalidValues[sudoku.puzzle[bx+i][by+j]] = true;
+				invalidValues[puzzle[bx+i][by+j]] = true;
 			}
 		}
 
@@ -78,371 +61,35 @@ var sudoku = function()
 			if (invalidValues[i] !== true)
 			{
 				// Set the value for this cell
-				sudoku.puzzle[row][column] = i;
+				puzzle[row][column] = i;
+
+				var newPuzzle = recursiveSolver(puzzle)
 
 				// Move to the next cell and recursively solve it
-				if (sudoku.recursiveSolver())
-					return true
+				if (newPuzzle !== false)
+					return newPuzzle
 
 				// If We had trouble solving the next cell then reset this cell and
 				// let the loop iterate so we can try with the next value
-				sudoku.puzzle[row][column] = 0;
+				puzzle[row][column] = 0;
 			}
 		}
 
 		return false;
 	}
 
-	/**
-	 * Solve a sudoku puzzle using backtracking.
-	 * A puzzle should be given as a two dimensional
-	 * array of values, where the `0` value indicates
-	 * that the cell is empty, and any other value
-	 * indicates that the cell has already been given
-	 * to us and should not be changed.
-	 *
-	 * If the puzzle is unsolvable then false will be returned
-	 *
-	 * @param  {array}  unsolvedPuzzle The 2D puzzle array
-	 * @return {Object}                The solved puzzle and some statistics
-	 *                                 about the generated algorithm
-	 */
-	this.solve = function(unsolvedPuzzle)
-	{
-		// Keep the puzzle, we will be filling in it's values
-		sudoku.puzzle = unsolvedPuzzle;
-
-		// Clear the available values
-		sudoku.availableValues = [];
-
-		// Setup the available values for each cell. If a cell already has
-		// a number filled, then the available values for that cell will be
-		// a boolean false, indicating that the value should not be changed
-		for (var row in sudoku.puzzle)
-		{
-			sudoku.availableValues[row] = [];
-
-			for (var column in sudoku.puzzle)
-			{
-				// determine if the cell will have values
-				sudoku.availableValues[row][column] = [];
-
-				// Continue the loop if there will be no available values
-				if (sudoku.puzzle[row][column] !== 0)
-				{
-					sudoku.availableValues[row][column] = false;
-					continue;
-				}
-
-				// All numbers are valid for this cell, 1-9
-				sudoku.resetCellValues([row, column]);
-			}
-		}
-
-		// Make sure that the unsolved puzzle is valid before solving it
-		for (var index = 0; index < 81; ++index)
-		{
-			if ( ! sudoku.isValidSudoku(sudoku.getCellByIndex(index)))
-				return false;
-		}
-
-		// Keep track of the iterations and start time
-		var iterations = 0,
-		    backtracks = 0,
-		    startTime  = new Date().getTime();
-
-		// Begin iterating horizontally over the puzzle filling the cells
-		for (var index = 0; index < 81;)
-		{
-			// Calculate the row and column for this index
-			var cell   = sudoku.getCellByIndex(index),
-			    row    = cell[0],
-			    column = cell[1];
-
-			// If this cell isn't mutable, continue to the next
-			if ( ! sudoku.isCellMutable(cell))
-			{
-				++index;
-				continue;
-			}
-
-			// Keep track of how many iterations we have been through
-			++iterations;
-
-			// Get a random value for this cell (if one is available)
-			var newValue = sudoku.getRandForCell(cell);
-
-			// Make sure we have a valid value for this cell
-			if (newValue !== false)
-			{
-				// Determine if the value fits into the cell
-				if (sudoku.isValidValue(cell, newValue))
-				{
-					// Set this as the value for the cell
-					sudoku.puzzle[row][column] = newValue;
-
-					// Move to the next cell in the table
-					++index;
-				}
-
-				// Remove the value from it's available list
-				sudoku.availableValues[row][column][newValue] = false;
-			}
-			else
-			{
-				// Reset the available values for this cell
-				sudoku.resetCellValues(cell);
-
-				// Backtrack to the most recent mutable cell
-				while (true)
-				{
-					// Move back to the previous index
-					--index;
-
-					// If we backtracked too far then this puzzle is unsolvable
-					if (index < 0)
-						return false;
-
-					// Get the cell array of the previous cell
-					var previousCell = sudoku.getCellByIndex(index);
-
-					// Keep backtracking if this cell isn't mutable
-					if ( ! sudoku.isCellMutable(previousCell))
-						continue;
-
-					// Clear the value of the previous cell
-					sudoku.puzzle[previousCell[0]][previousCell[1]] = 0;
-
-					// Keep track of how many times we had to backtrack
-					++backtracks;
-
-					break;
-				}
-			}
-		}
-
-		// Get the end time
-		var endTime = new Date().getTime();
-
-		// Compile a nice object with the solved information
-		return {
-			'puzzle'      : sudoku.puzzle,
-			'iterations'  : iterations,
-			'backtracks'  : backtracks,
-			'runningTime' : endTime - startTime,
-		};
-	};
-
-	/**
-	 * Determine if a given value is an acceptable
-	 * value to be filled into a cell. There are three
-	 * conditions that a value must meet in order for
-	 * the value for be a valid number for a given cell
-	 *
-	 *  1. The cell must not be false in the list of
-	 *     available values, if it is false, this indicates
-	 *     that the cell is immutable and cannot be changed
-	 *
-	 *  2. The value must be true in the `availableValues`
-	 *     list for that cell, if it is not in the list then
-	 *     it has already been tried in that cell and was
-	 *     an invalid value.
-	 *
-	 *  3. The value is a valid move to make in the game of
-	 *     sudoku and can be made without consequence
-	 *
-	 * If all these conditions are matched, than the value
-	 * can be placed into the cell
-	 *
-	 * @param  {Arrray}  cell  The cell given as an array of [y, x]
-	 * @param  {Integer} value The value to check for cell validity
-	 * @return {Boolean}       Weather the value is valid in the cell
-	 */
-	this.isValidValue = function(cell, value)
-	{
-		var y = cell[0], x = cell[1];
-
-		// Ensure that the cell is a mutable cell
-		if ( ! sudoku.isCellMutable(cell))
-			return false;
-
-		// Make sure that the value can even be used at all
-		if ( ! (value in sudoku.availableValues[y][x]))
-			return false;
-
-		// Test that the valued is available for this cell
-		if (sudoku.availableValues[y][x][value] === false)
-			return false;
-
-		if ( ! sudoku.isValidSudoku(cell, value))
-			return false;
-
-		return true;
-	};
-
-	/**
-	 * This method determins if entering a certian value
-	 * into a cell would be considered a valid sudoku
-	 * move that does not violate the three rules
-	 *
-	 *  1. The value currently exists only once in the given
-	 *     row of the cell.
-	 *
-	 *  2. The value currently exists only once in the given
-	 *     column of the cell
-	 *
-	 *  3. The value currently exists only once in the sudoku
-	 *     square that the cell falls into. This is a 3x3
-	 *     square the exists as a super set of the cells
-	 *
-	 * If no value is provided, ther current value in the cell
-	 * will be used to test if it's a valid sudoku move
-	 *
-	 * @param  {Arrray}  cell  The cell given as an array of [y, x]
-	 * @param  {Integer} value The value to check for cell validity
-	 * @return {Boolean}       Weather the value makes a valid sudoku
-	 */
-	this.isValidSudoku = function(cell, value)
-	{
-		var y = cell[0], x = cell[1];
-
-		// If no value is given, check that the current value is valid
-		value = value || sudoku.puzzle[y][x];
-
-		// Ignore empty cells, these cells are always valid
-		if (value === 0)
-			return true;
-
-		// Test that the value is available for this row
-		for (var column in sudoku.puzzle[y])
-		{
-			if (value === sudoku.puzzle[y][column] && column != x)
-				return false;
-		}
-
-		// Test that the value is not in the column
-		for (var row in sudoku.puzzle)
-		{
-			if (value === sudoku.puzzle[row][x] && row != y)
-				return false;
-		}
-
-		// Find the top-left corner of the super square
-		var squareY = Math.floor(y / 3) * 3,
-		    squareX = Math.floor(x / 3) * 3;
-
-		// Determine if the value exists in the square
-		for (var row = squareY; row < squareY + 3; ++row)
-		{
-			for (var column = squareX; column < squareX + 3; ++column)
-			{
-				if (value === sudoku.puzzle[row][column] && row != y && column != x)
-					return false;
-			}
-		}
-
-		return true;
-	};
-
-	/**
-	 * Get a random value from the list of available
-	 * values for a specified cell. If the cell has
-	 * no values available then a boolean false will
-	 * be returned
-	 *
-	 * @param  {Array} cell The cell given as an array of [y, x]
-	 * @return {Mixed}      Boolean false if there are no values
-	 *                      available, or a random Integer value
-	 *                      that exists in the list of values
-	 */
-	this.getRandForCell = function(cell)
-	{
-		var y = cell[0], x = cell[1];
-
-		// Ignore cells that are immutable
-		if ( ! sudoku.isCellMutable(cell))
-			return false;
-
-		// Build a list of the available values
-		var availableForRand = [];
-
-		for (var value in sudoku.availableValues[y][x])
-		{
-			if (sudoku.availableValues[y][x][value] === true)
-			{
-				availableForRand.push(parseInt(value));
-			}
-		}
-
-		// Make sure that cell has values available
-		if (availableForRand.length === 0)
-			return false;
-
-		// Get the index to select randomly
-		var randIndex = Math.floor(Math.random() * availableForRand.length);
-
-		return availableForRand[randIndex];
-	};
-
-	/**
-	 * Reset the available values for a given cell
-	 * so that the cell can now take any value. This
-	 * method will also remove what ever value was set
-	 * for the cell previously
-	 *
-	 * @param {Array} cell The cell given as an array of [y, x] to clear
-	 */
-	this.resetCellValues = function(cell)
-	{
-		var y = cell[0], x = cell[1];
-
-		// Never reset immutable cells
-		if ( ! sudoku.isCellMutable(cell))
-			return false;
-
-		// Set all values for this cell as available
-		for (var i = 1; i < 10; ++i)
-		{
-			sudoku.availableValues[y][x][i] = true;
-		}
-
-		// Set the value of the cell to zero (unknown)
-		sudoku.puzzle[y][x] = 0;
-	};
-
-	/**
-	 * Determine if a given cell is mutable. That is the
-	 * cell has not been defined in the puzzle as an
-	 * unchangeable value.
-	 *
-	 * We define immutable cells as those that have their
-	 * `availableValues` array set to false
-	 *
-	 * @param  {Array}   cell The cell given as an array of [y, x]
-	 * @return {Boolean}      Weather the cell is mutable or not
-	 */
-	this.isCellMutable = function(cell)
-	{
-		var y = cell[0], x = cell[1];
-
-		return sudoku.availableValues[y][x] !== false
-	};
-
-	/**
-	 * Given an index from 0-80 return the cell
-	 * coordinates as an array in the form [x, y]
-	 *
-	 * @param  {Integer} index The index of the cell
-	 * @return {Array}         The coordinates of the cell
-	 */
-	this.getCellByIndex = function(index)
-	{
-		return [Math.floor(index / 9), index % 9];
-	};
-
-	// Make the solve method public
-	return {
-		'iterativeSolve' : this.solve,
-		'recursiveSolve' : this.solveRecursively,
-	};
+	return this.recursiveSolver;
 }();
+
+var veryHard = [];
+veryHard[0] = [1, 0, 0, 0, 0, 7, 0, 9, 0]; // [1, 6, 2, 8, 5, 7, 4, 9, 3]
+veryHard[1] = [0, 3, 0, 0, 2, 0, 0, 0, 8]; // [5, 3, 4, 1, 2, 9, 6, 7, 8]
+veryHard[2] = [0, 0, 9, 6, 0, 0, 5, 0, 0]; // [7, 8, 9, 6, 4, 3, 5, 2, 1]
+veryHard[3] = [0, 0, 5, 3, 0, 0, 9, 0, 0]; // [4, 7, 5, 3, 1, 2, 9, 8, 6]
+veryHard[4] = [0, 1, 0, 0, 8, 0, 0, 0, 2]; // [9, 1, 3, 5, 8, 6, 7, 4, 2]
+veryHard[5] = [6, 0, 0, 0, 0, 4, 0, 0, 0]; // [6, 2, 8, 7, 9, 4, 1, 3, 5]
+veryHard[6] = [3, 0, 0, 0, 0, 0, 0, 1, 0]; // [3, 5, 6, 4, 7, 8, 2, 1, 9]
+veryHard[7] = [0, 4, 0, 0, 0, 0, 0, 0, 7]; // [2, 4, 1, 9, 3, 5, 8, 6, 7]
+veryHard[8] = [0, 0, 7, 0, 0, 0, 3, 0, 0]; // [8, 9, 7, 2, 6, 1, 3, 5, 4]
+
+console.log(sudoku(veryHard));
