@@ -155,7 +155,7 @@ $(function()
 			minElement.innerHTML       = min + 'ms';
 			maxElement.innerHTML       = max + 'ms';
 			avgElement.innerHTML       = avg + 'ms';
-		});
+		}, 0);
 	});
 
 	/**
