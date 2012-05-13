@@ -1,4 +1,4 @@
-* NOTE: This readme is out of date and needs rewritten, please refer to the actual code!*
+*NOTE: This readme is out of date and needs rewritten, please refer to the actual code!*
 
 ## Sudokuer
 
